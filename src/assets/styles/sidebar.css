@@ -76,10 +76,10 @@
   -webkit-backdrop-filter: none;
 }
 
-.sidebar-logo-container.scrolled {
+/* .sidebar-logo-container.scrolled {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-}
+} */
 .sidebar-logo-container-scroll{
     mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 9.6%, #000000 13.66%, #000000 88.31%, rgb(0 0 0) 94.87%);
     mask-repeat: no-repeat;mask-position: -1px 0;mask-clip: no-clip;mask-mode: alpha;mask-composite: intersect;
