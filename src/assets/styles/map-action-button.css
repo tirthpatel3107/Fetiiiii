@@ -1,0 +1,40 @@
+/* Map Action Button Container */
+.map-action-button-container {
+  position: fixed;
+  right: 16px;
+  top: 16px;
+  z-index: 996;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Map Action Button */
+.map-action-button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.map-action-button:hover {
+  opacity: 0.8;
+}
+
+.map-action-button:active {
+  opacity: 0.6;
+}
+

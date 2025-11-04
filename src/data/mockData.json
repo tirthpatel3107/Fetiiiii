@@ -1,0 +1,147 @@
+[
+  {
+    "message": "Based on our Austin trip data from the last six months, here are the top 5 busiest destinations where Fetii groups travel:\n\n1. The Aquarium (East 6th Street) - 64 Trips\n\n2. Wiggle Room (Nueces Street) - 52 Trips\n\n3. Shakespeare's (East 6th Street) - 45 Trips\n\n4. Mayfair Austin (West 6th Street) - 43 Trips\n\n5. Latchkey (East 6th Street) - 32 Visits",
+    "cards": [
+      {
+        "indicator": 1,
+        "visits": 64,
+        "title": "The Aquarium",
+        "address": "East 6th Street, Austin, TX",
+        "category": "Entertainment",
+        "lat": 30.2672,
+        "lng": -97.7324
+      },
+      {
+        "indicator": 2,
+        "visits": 52,
+        "title": "Wiggle Room",
+        "address": "612 Nueces St, Austin, TX 78701",
+        "category": "Nightlife",
+        "lat": 30.2691,
+        "lng": -97.7501
+      },
+      {
+        "indicator": 3,
+        "visits": 45,
+        "title": "Shakespeare's",
+        "address": "East 6th Street, Austin, TX",
+        "category": "Entertainment",
+        "lat": 30.2678,
+        "lng": -97.733
+      },
+      {
+        "indicator": 4,
+        "visits": 43,
+        "title": "Mayfair Austin",
+        "address": "West 6th Street, Austin, TX",
+        "category": "Nightlife",
+        "lat": 30.2685,
+        "lng": -97.7519
+      },
+      {
+        "indicator": 5,
+        "visits": 32,
+        "title": "Latchkey",
+        "address": "1308 E 6th St, Austin, TX 78702",
+        "category": "Entertainment",
+        "lat": 30.2668,
+        "lng": -97.732
+      }
+    ]
+  },
+  {
+    "message": "Here are the busiest pickup locations based on trip volume:\n\n1. Nueces St - 901 trips\n\n2. W 6th St & E 6th St - 789 trips\n\n3. E 6th St - 615 trips\n\n4. Rio Grande St - 586 trips\n\n5. S Lamar Blvd - 568 trips\n\n6. W 6th St - 448 trips\n\n7. W 23rd St - 407 trips\n\n8. E Cesar Chavez St - 394 trips\n\n9. W 22nd St - 384 trips\n\n10. San Antonio St - 372 trips\n\nThe data shows heavy pickup activity concentrated around downtown Austin, particularly along the 6th Street corridor and major thoroughfares like Nueces Street and Rio Grande Street. The UT campus area (W 22nd/23rd Streets) and popular districts like South Lamar also see significant rideshare pickup volume.",
+    "cards": [
+      {
+        "indicator": 1,
+        "visits": 901,
+        "title": "Nueces St",
+        "address": "Nueces St, Austin, TX",
+        "category": "Pickup Location",
+        "lat": 30.2691,
+        "lng": -97.7501
+      },
+      {
+        "indicator": 2,
+        "visits": 789,
+        "title": "W 6th St & E 6th St",
+        "address": "W 6th St & E 6th St, Austin, TX",
+        "category": "Pickup Location",
+        "lat": 30.2685,
+        "lng": -97.742
+      },
+      {
+        "indicator": 3,
+        "visits": 615,
+        "title": "E 6th St",
+        "address": "E 6th St, Austin, TX",
+        "category": "Pickup Location",
+        "lat": 30.2672,
+        "lng": -97.7324
+      },
+      {
+        "indicator": 4,
+        "visits": 586,
+        "title": "Rio Grande St",
+        "address": "Rio Grande St, Austin, TX",
+        "category": "Pickup Location",
+        "lat": 30.2719,
+        "lng": -97.7412
+      },
+      {
+        "indicator": 5,
+        "visits": 568,
+        "title": "S Lamar Blvd",
+        "address": "S Lamar Blvd, Austin, TX",
+        "category": "Pickup Location",
+        "lat": 30.2581,
+        "lng": -97.7658
+      },
+      {
+        "indicator": 6,
+        "visits": 448,
+        "title": "W 6th St",
+        "address": "W 6th St, Austin, TX",
+        "category": "Pickup Location",
+        "lat": 30.2685,
+        "lng": -97.7519
+      },
+      {
+        "indicator": 7,
+        "visits": 407,
+        "title": "W 23rd St",
+        "address": "W 23rd St, Austin, TX",
+        "category": "Pickup Location",
+        "lat": 30.2859,
+        "lng": -97.7412
+      },
+      {
+        "indicator": 8,
+        "visits": 394,
+        "title": "E Cesar Chavez St",
+        "address": "E Cesar Chavez St, Austin, TX",
+        "category": "Pickup Location",
+        "lat": 30.2621,
+        "lng": -97.7324
+      },
+      {
+        "indicator": 9,
+        "visits": 384,
+        "title": "W 22nd St",
+        "address": "W 22nd St, Austin, TX",
+        "category": "Pickup Location",
+        "lat": 30.2836,
+        "lng": -97.7412
+      },
+      {
+        "indicator": 10,
+        "visits": 372,
+        "title": "San Antonio St",
+        "address": "San Antonio St, Austin, TX",
+        "category": "Pickup Location",
+        "lat": 30.2719,
+        "lng": -97.7388
+      }
+    ]
+  }
+]

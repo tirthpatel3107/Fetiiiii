@@ -1,0 +1,87 @@
+/* Leaflet Map Container */
+.leaflet-map-container {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+/* Custom Marker Styles */
+/* Styles are applied via inline HTML in createCustomIcon function */
+/* This class is used for targeting */
+/* .custom-marker {
+} */
+
+/* Custom Popup Content */
+.custom-popup-content {
+  min-width: 200px;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.popup-indicator-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.15) 0%,
+      rgba(255, 255, 255, 0) 100%
+    ),
+    linear-gradient(
+      0deg,
+      var(--Purple-1, #981ff5) 0%,
+      var(--Purple-1, #981ff5) 100%
+    ),
+    #d9d9d9;
+  background-blend-mode: normal;
+}
+
+.popup-indicator-number {
+  color: white;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.popup-visits-badge {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  padding: 6px 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.popup-body {
+  margin-top: 8px;
+}
+
+.popup-title {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.popup-address {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+.popup-category {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+}

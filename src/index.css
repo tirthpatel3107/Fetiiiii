@@ -1,0 +1,221 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+    font-family: "Open Runde";
+    src: url("assets/fonts/OpenRunde-Regular.woff2") format("woff2"),url("assets/fonts/OpenRunde-Regular.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap
+}
+
+@font-face {
+    font-family: "Open Runde";
+    src: url("assets/fonts/OpenRunde-Medium.woff2") format("woff2"),url("assets/fonts/OpenRunde-Medium.woff") format("woff");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap
+}
+
+@font-face {
+    font-family: "Open Runde";
+    src: url("assets/fonts/OpenRunde-Semibold.woff2") format("woff2"),url("assets/fonts/OpenRunde-Semibold.woff") format("woff");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap
+}
+
+@font-face {
+    font-family: "Open Runde";
+    src: url("assets/fonts/OpenRunde-Bold.woff2") format("woff2"),url("assets/fonts/OpenRunde-Bold.woff") format("woff");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background-color: #f5f5f5;
+  /* Hide scrollbar while maintaining scroll functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  font-family: "Open Runde", sans-serif;
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+:root {
+  --primary-color: #981FF5;
+}
+
+.leaflet-layer {
+  filter: brightness(0.9) sepia(100%) saturate(150%) hue-rotate(200deg);
+}
+
+/* Custom Popup Styles */
+.leaflet-popup-content-wrapper {
+  border-radius: 24px !important;
+  padding: 0 !important;
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  background: radial-gradient(49.91% 49.91% at 50% 99.82%, rgba(152, 31, 245, 0.40) 0%, rgba(152, 31, 245, 0.00) 100%), linear-gradient(0deg, rgba(152, 31, 245, 0.30) 0%, rgba(152, 31, 245, 0.30) 100%), rgba(0, 0, 0, 0.10);
+  stroke-width: 1px;
+  stroke: rgba(255, 255, 255, 0.10);
+  background-blend-mode: darken;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.30));
+  backdrop-filter: blur(20px); */
+
+  /* background: radial-gradient(49.91% 49.91% at 50% 99.82%, rgba(152, 31, 245, 0.40) 0%, rgba(152, 31, 245, 0.00) 100%), linear-gradient(0deg, rgba(152, 31, 245, 0.30) 0%, rgba(152, 31, 245, 0.30) 100%), rgba(0, 0, 0, 0.10);
+  stroke-width: 1px;
+  stroke: rgba(255, 255, 255, 0.10);
+  background-blend-mode: normal;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.30));
+  backdrop-filter: blur(40px);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.3); */
+  background: url(../src/assets/images/map-pin.png) no-repeat center center / 100% 100%;
+    box-shadow: none;
+    padding: 10px 19px !important;
+    width: 100%;
+}
+
+/* .popup-body p:last-child{padding-bottom: 16px;} */
+.leaflet-popup{margin-bottom: 0;bottom: -16px !important;}
+.leaflet-popup-content {
+  margin: 16px 16px 46px 16px !important;
+  min-width: 200px;
+  width: 200px !important;
+}
+
+.leaflet-popup-tip {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* .custom-popup-content {
+  padding: 16px;
+} */
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.popup-indicator-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: 600;
+    font-size: 13px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.00) 100%), linear-gradient(0deg, var(--Purple-1, #981FF5) 0%, var(--Purple-1, #981FF5) 100%), #D9D9D9;
+    background-blend-mode: normal;
+}
+
+/* .popup-indicator-number {
+  color: #981FF5;
+  font-weight: bold;
+  font-size: 16px;
+} */
+
+.popup-visits-badge {
+    background: rgba(0, 0, 0, 0.20);
+    border-radius: 20px;
+    padding: 6px 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.popup-body {
+  text-align: left;
+  max-height: 80px;
+  overflow: auto;
+}
+.popup-body::-webkit-scrollbar {
+  width: 6px;
+}
+.popup-body::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 3px;
+}
+.popup-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  backdrop-filter: blur(10px);
+}
+.popup-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.leaflet-container{
+  font-family: "Open Runde", sans-serif;
+}
+.popup-title {
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 100%;
+  margin-bottom: 4px;
+}
+.leaflet-popup-content p{
+  margin: 0;font-weight: 400; font-size: 12px; color: rgba(255, 255, 255, 0.4);
+}
+
+.popup-address {
+  color: #D4B0FF;
+  font-size: 14px;
+  margin: 0 0 6px 0;
+  line-height: 1.4;
+}
+
+.popup-category {
+  color: #D4B0FF;
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Ensure map controls are visible above map */
+.leaflet-container {
+  position: relative;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 1000;
+}
+
+/* Custom map action button container */
+.leaflet-pane {
+  z-index: 400;
+}
+
+.leaflet-map-pane {
+  z-index: 400;
+}
+
+/* Hide Leaflet default zoom controls */
+.leaflet-control-zoom {
+  display: none !important;
+}
+
+/* Hide Leaflet attribution/watermark at the bottom */
+.leaflet-control-attribution {
+  display: none !important;
+}
