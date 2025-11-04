@@ -163,6 +163,14 @@ const LeafletMap = ({ places = [], selectedMarkerId = null, onMarkerDeselect = n
     return places.filter((place) => place.lat && place.lng);
   }, [places]);
 
+  // Get Stadia Maps API key from environment variable
+  const stadiaMapsApiKey = import.meta.env.VITE_STADIAMAPS_API_KEY || '8a1d5bd4-f849-4496-9950-25a1dca46879';
+  
+  // Build tile URL with API key if available
+  const tileUrl = stadiaMapsApiKey 
+    ? `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=${stadiaMapsApiKey}`
+    : "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png";
+
   return (
     <div className="leaflet-map-container">
       <MapContainer
@@ -178,8 +186,7 @@ const LeafletMap = ({ places = [], selectedMarkerId = null, onMarkerDeselect = n
       >
         <TileLayer
           attribution=''
-          // url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
+          url={tileUrl}
           maxZoom={19}
           minZoom={3}
         />
