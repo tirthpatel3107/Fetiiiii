@@ -164,7 +164,7 @@ const LeafletMap = ({ places = [], selectedMarkerId = null, onMarkerDeselect = n
   }, [places]);
 
   // Get Stadia Maps API key from environment variable
-  const stadiaMapsApiKey = import.meta.env.VITE_STADIAMAPS_API_KEY || '8a1d5bd4-f849-4496-9950-25a1dca46879';
+  const stadiaMapsApiKey = import.meta.env.VITE_STADIAMAPS_API_KEY || '';
   
   // Build tile URL with API key if available
   const tileUrl = stadiaMapsApiKey 

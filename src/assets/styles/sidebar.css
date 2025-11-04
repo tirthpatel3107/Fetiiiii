@@ -132,11 +132,6 @@
   color: #ffffffcc;
   font-size: 13px;
   cursor: pointer;
-  margin-bottom: 0;
-}
-
-.sidebar-quick-suggestion-item.last-suggestion {
-  margin-bottom: 12px;
 }
 
 /* Sidebar Quick Suggestion Text */
@@ -200,18 +195,8 @@
   padding-top: 2px;
   padding-bottom: 2px;
   caret-color: var(--primary-color);
-  /* Hide scrollbar but keep scrolling functionality */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-/* Hide scrollbar for WebKit browsers (Chrome, Safari, Opera) */
-.sidebar-textarea-field::-webkit-scrollbar {
-  display: none;
-}
-
-.sidebar-textarea-field.hidden {
-  display: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 /* Scrollbar styles for textarea */
@@ -299,7 +284,6 @@ textarea.sidebar-textarea-field:-ms-input-placeholder {
  }
  .msg-sub-wrapper{
   position: absolute;bottom: 10.58%;left: 0;right: 0;top: 0;
-  --fill-0: rgba(152, 31, 245, 1);
  }
 
 /* Assistant Message - Left Aligned */
@@ -317,7 +301,6 @@ textarea.sidebar-textarea-field:-ms-input-placeholder {
   position: relative;
   white-space: pre-line;
 }
-
 .left-msg-arrow{
     left: 3.21px;
 }
@@ -437,6 +420,10 @@ textarea.sidebar-textarea-field:-ms-input-placeholder {
     width: 100%;
     max-width: 100vw;
     transform: translateX(0);
+  }
+
+  .sidebar-logo-container-scroll{
+     mask-image:linear-gradient(180deg, rgba(0, 0, 0, 0.2) 9.6%, #000000 20%, #000000 88.31%, rgb(0 0 0) 94.87%)
   }
 }
 

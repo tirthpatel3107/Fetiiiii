@@ -25,6 +25,7 @@ const PlaceCard = ({
             : "select-item"
         }`}
       onClick={onClick}
+      style={{ cursor: onClick ? "pointer" : "default" }}
     >
       {/* Top row with indicator and visits */}
       <div className="place-card-header">
@@ -35,13 +36,15 @@ const PlaceCard = ({
         <div className="place-card-visits">{visits} Visits</div>
       </div>
 
-      {/* Place name */}
-      <h2 className="place-card-title">{title}</h2>
+      <div className="address-scroll">
+        {/* Place name */}
+        <h2 className="place-card-title">{title}</h2>
 
-      {/* Address and category */}
-      <p className="place-card-subtitle">
-        {address} <span className="place-card-bullet">•</span> {category}
-      </p>
+        {/* Address and category */}
+        <p className="place-card-subtitle">
+          {address} <span className="place-card-bullet">•</span> {category}
+        </p>
+        </div>
     </div>
   );
 };
