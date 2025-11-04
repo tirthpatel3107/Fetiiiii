@@ -178,7 +178,8 @@ const LeafletMap = ({ places = [], selectedMarkerId = null, onMarkerDeselect = n
       >
         <TileLayer
           attribution=''
-          url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+          // url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
           maxZoom={19}
           minZoom={3}
         />
