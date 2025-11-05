@@ -6,10 +6,14 @@
   right: 0;
   height: 60px;
   background: transparent;
-  z-index: 1001;
+  z-index: 996;
   display: none;
   align-items: center;
   padding: 0 16px;
+}
+
+.app-header.sidebar-open {
+  z-index: 1001;
 }
 
 /* Hamburger Menu Button */
