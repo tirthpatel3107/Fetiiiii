@@ -1,19 +1,22 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 
 // images
 import LogoIcon from "../../assets/images/logo.svg";
 import InactiveSendIcon from "../../assets/images/inactive-send.svg";
 import ActiveSendIcon from "../../assets/images/active-send.svg";
-import LeftDownIcon from "../../assets/images/left-down-arrow.svg";
+
+// hooks
+import useResolution from "../../hooks/useResolution";
+import useAutoGrowTextarea from "../../hooks/useAutoGrowTextarea";
+import useScrollToBottom from "../../hooks/useScrollToBottom";
+import useScrollDetection from "../../hooks/useScrollDetection";
+import useLoadingMessageRotation from "../../hooks/useLoadingMessageRotation";
+
+// utils
+import { QUICK_SUGGESTIONS, LOADING_MESSAGES, UI, MESSAGE_TYPES } from "../../utils/constants";
 
 // styles
 import "../../assets/styles/sidebar.css";
-
-const quickSuggestions = [
-  "What are the top 5 drop-off locations?",
-  "Where are college kids frequenting on weekdays?",
-  "How far are riders normally traveling to get to De Nada?",
-];
 
 /* Sidebar Component */
 const Sidebar = ({
@@ -24,92 +27,29 @@ const Sidebar = ({
   isLoading = false,
   onAssistantMessageClick = null,
 }) => {
-  const textareaRef = useRef(null);
-  const contentSectionRef = useRef(null);
-
   const [inputValue, setInputValue] = useState("");
-  const [contentReachedLogo, setContentReachedLogo] = useState(false);
 
-  // Scroll to bottom on initial render
-  useEffect(() => {
-    const contentSection = contentSectionRef.current;
-    if (contentSection) {
-      // Use requestAnimationFrame to ensure DOM is fully rendered
-      requestAnimationFrame(() => {
-        contentSection.scrollTop = contentSection.scrollHeight;
-      });
-    }
-  }, []);
+  // Use common resolution detection hook
+  const { isMobile, isDesktop } = useResolution();
 
-  // Scroll to bottom when conversation history changes
-  useEffect(() => {
-    const contentSection = contentSectionRef.current;
-    if (contentSection && conversationHistory.length > 0) {
-      // Use setTimeout with requestAnimationFrame to ensure DOM is fully updated
-      // This handles both when loading completes and when message content updates
-      const scrollToBottom = () => {
-        requestAnimationFrame(() => {
-          contentSection.scrollTop = contentSection.scrollHeight;
-        });
-      };
+  // Use scroll detection hook for logo styling
+  const { containerRef: contentSectionRef, hasScrolledPastThreshold: contentReachedLogo } = 
+    useScrollDetection(UI.SCROLL_THRESHOLD);
 
-      // Small delay to ensure DOM has updated with new content
-      const timeoutId = setTimeout(scrollToBottom, 50);
+  // Use scroll to bottom hook for conversation history
+  useScrollToBottom(contentSectionRef, [conversationHistory, isLoading], { scrollOnMount: true });
 
-      return () => clearTimeout(timeoutId);
-    }
-  }, [conversationHistory, isLoading]);
+  // Use loading message rotation hook for mobile
+  const currentLoadingMessageIndex = useLoadingMessageRotation(
+    isMobile,
+    conversationHistory,
+    LOADING_MESSAGES.SIDEBAR
+  );
 
-  // Custom scroll handler - checks if content has scrolled past logo
-  useEffect(() => {
-    const contentSection = contentSectionRef.current;
-    if (!contentSection) return;
-
-    const handleScroll = () => {
-      const scrollTop = contentSection.scrollTop;
-      // Check if content has scrolled up (scrollTop > 20 means content is being scrolled)
-      setContentReachedLogo(scrollTop > 20);
-    };
-
-    contentSection.addEventListener("scroll", handleScroll);
-    // Check initial state
-    handleScroll();
-
-    return () => {
-      contentSection.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  // Auto-grow textarea and scroll content to bottom when textarea expands
-  useEffect(() => {
-    const textarea = textareaRef.current;
-    const contentSection = contentSectionRef.current;
-
-    if (!textarea) return;
-
-    // Reset height to auto to get accurate scrollHeight
-    textarea.style.height = "auto";
-    const scrollHeight = textarea.scrollHeight;
-    const lineHeight = parseInt(getComputedStyle(textarea).lineHeight) || 20;
-    const maxHeight = lineHeight * 5; // Maximum 5 rows
-
-    // Set height based on content, with max constraint
-    if (scrollHeight <= maxHeight) {
-      textarea.style.height = `${scrollHeight}px`;
-      textarea.style.overflowY = "hidden";
-    } else {
-      textarea.style.height = `${maxHeight}px`;
-      textarea.style.overflowY = "auto";
-    }
-
-    // When textarea height changes, scroll content section to bottom
-    // This makes content appear to move up as textarea expands
-    if (contentSection) {
-      requestAnimationFrame(() => {
-        contentSection.scrollTop = contentSection.scrollHeight;
-      });
-    }
-  }, [inputValue]);
+  // Use auto-grow textarea hook
+  const textareaRef = useAutoGrowTextarea(inputValue, {
+    scrollContainerRef: contentSectionRef,
+  });
 
   /* Handles input change in the textarea */
   const handleInputChange = (e) => {
@@ -165,11 +105,12 @@ const Sidebar = ({
             <div className="sidebar-content-container sidebar-logo-container-scroll">
               {/*===== Suggestions =====*/}
               <div ref={contentSectionRef} className="sidebar-content-section">
-                {quickSuggestions.map((suggestion, index) => (
+                {/* Show suggestions on desktop always, or on mobile/tablet only when no messages */}
+                {(isDesktop || conversationHistory.length === 0) && QUICK_SUGGESTIONS.map((suggestion, index) => (
                   <div
                     key={index}
                     className={`sidebar-quick-suggestion-item ${
-                      index === quickSuggestions.length - 1
+                      index === QUICK_SUGGESTIONS.length - 1
                         ? "last-suggestion"
                         : ""
                     }`}
@@ -178,24 +119,24 @@ const Sidebar = ({
                     <div className="sidebar-quick-suggestion-text">
                       {suggestion}
                     </div>
-                    <button className="sidebar-quick-suggestion-button">
-                      <img
-                        src={LeftDownIcon}
-                        alt="Send"
-                        className="sidebar-quick-suggestion-icon"
-                      />
-                    </button>
                   </div>
                 ))}
 
                 {/* Show conversation history */}
                 {conversationHistory.map((msg) => (
                   <React.Fragment key={msg.id}>
-                    {msg.type === "user" ? (
+                    {msg.type === MESSAGE_TYPES.USER ? (
                       /* User Message */
                       <div className="sidebar-message sidebar-message-user">
                         <div className="sidebar-message-content seachable-text">
-                          {msg.message}
+                          <span>{msg.message}</span>
+                          {msg.isLoading && (
+                            <span className="user-message-loading-dots">
+                              <span className="user-message-loading-dot"></span>
+                              <span className="user-message-loading-dot"></span>
+                              <span className="user-message-loading-dot"></span>
+                            </span>
+                          )}
                         </div>
                         <div className="msg-bottom-wrapper" data-name="Tail">
                           <div className="msg-sub-wrapper">
@@ -218,10 +159,22 @@ const Sidebar = ({
                     msg.isLoading ? (
                       <div className="sidebar-message sidebar-message-assistant">
                         <div className="sidebar-message-content sidebar-message-loading">
+                          {/* Desktop/Tablet loader */}
                           <div className="sidebar-chat-loader">
                             <div className="sidebar-chat-loader-dot"></div>
                             <div className="sidebar-chat-loader-dot"></div>
                             <div className="sidebar-chat-loader-dot"></div>
+                          </div>
+                          {/* Mobile loader with messages */}
+                          <div className="sidebar-message-loading-mobile">
+                            <div className="sidebar-message-loading-mobile-text">
+                              {LOADING_MESSAGES.SIDEBAR[currentLoadingMessageIndex]}
+                            </div>
+                            <div className="sidebar-message-loading-mobile-dots">
+                              <div className="sidebar-message-loading-mobile-dot"></div>
+                              <div className="sidebar-message-loading-mobile-dot"></div>
+                              <div className="sidebar-message-loading-mobile-dot"></div>
+                            </div>
                           </div>
                         </div>
                       </div>

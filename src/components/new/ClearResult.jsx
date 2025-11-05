@@ -1,47 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+
+// hooks
+import useResolution from "../../hooks/useResolution";
+
+// utils
+import { preventDefaultAndStopPropagation, handleKeyboardAccessibility } from "../../utils/eventUtils";
 
 // styles
 import "../../assets/styles/clear-result.css";
 
 /* ClearResult Component */
 const ClearResult = ({ onClear, isSidebarOpen = false }) => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 1024);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  // Use common resolution detection hook
+  const { isMobileOrTablet } = useResolution();
 
   // Hide button on mobile/tablet when sidebar is open
-  const shouldHide = isMobile && isSidebarOpen;
+  const shouldHide = isMobileOrTablet && isSidebarOpen;
+
+  const handleClick = (e) => {
+    preventDefaultAndStopPropagation(e);
+    onClear();
+  };
 
   return (
     <div className={`clear-result-container ${shouldHide ? 'hidden' : ''}`}>
       <button 
         className="clear-result-button"
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          onClear();
-        }}
-        onTouchEnd={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          onClear();
-        }}
+        onClick={handleClick}
+        onTouchEnd={handleClick}
         role="button"
         tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            onClear();
-          }
-        }}
+        onKeyDown={(e) => handleKeyboardAccessibility(e, onClear)}
       >
         Clear Results
       </button>
