@@ -36,10 +36,6 @@
   background: rgba(45, 59, 78, 1);
 }
 
-.hamburger-menu-button:active {
-  transform: scale(0.95);
-}
-
 /* Hamburger Icon */
 .hamburger-icon {
   display: flex;
@@ -68,14 +64,12 @@
   /* Align hamburger with logo */
   .hamburger-menu-button {
     left: 16px;
-    top: 16px;
+    top: 22px;
     background: rgba(45, 59, 78, 0.9);
   }
 
   /* When sidebar is open, position hamburger aligned with logo */
   .hamburger-menu-button.sidebar-open {
-    left: 16px;
-    top: 25px;
     z-index: 1003; /* Above sidebar content */
   }
 
