@@ -2,7 +2,11 @@ import React, { useRef, useState, useEffect } from "react";
 
 // components
 import PlaceCard from "./common/PlaceCard";
-import { ANIMATION_DURATION } from "./LeafletMap";
+
+// utils
+import { ANIMATION, UI } from "../../utils/constants";
+import { isElementFullyVisible, calculateCenterScrollPosition, animateScroll } from "../../utils/domUtils";
+import { handleClickWithDragCheck } from "../../utils/eventUtils";
 
 // styles
 import "../../assets/styles/card.css";
@@ -60,7 +64,7 @@ const PlaceCardWrapper = ({
     const walk = (x - startX) * 2; // Scroll speed multiplier
 
     // If movement is significant, mark as moved
-    if (Math.abs(walk) > 5) {
+    if (Math.abs(walk) > UI.DRAG_MOVEMENT_THRESHOLD) {
       setHasMoved(true);
     }
 
@@ -70,9 +74,7 @@ const PlaceCardWrapper = ({
 
   /* Handles card click - only trigger if not dragging */
   const handleCardClick = (index) => {
-    if (!hasMoved && !isDragging && onCardClick) {
-      onCardClick(index);
-    }
+    handleClickWithDragCheck(null, () => onCardClick?.(index), hasMoved, isDragging);
   };
 
 
@@ -87,46 +89,13 @@ const PlaceCardWrapper = ({
       const cardElement = cardRefs.current[selectedCardIndex];
 
       if (cardElement) {
-        const cardRect = cardElement.getBoundingClientRect();
-        const containerRect = container.getBoundingClientRect();
-
-        // Calculate if card is fully visible within the container
-        const isCardVisible =
-          cardRect.left >= containerRect.left &&
-          cardRect.right <= containerRect.right;
+        // Check if card is fully visible within the container
+        const isCardVisible = isElementFullyVisible(cardElement, container);
 
         // If card is not fully visible, scroll to center it with synced animation
         if (!isCardVisible) {
-          // Get the card's position relative to the scroll container
-          const cardOffsetLeft = cardElement.offsetLeft;
-          const cardWidth = cardElement.offsetWidth;
-          const containerWidth = container.clientWidth;
-
-          // Calculate scroll position to center the card
-          const targetScroll = Math.max(
-            0,
-            cardOffsetLeft - containerWidth / 2 + cardWidth / 2
-          );
-          const startScroll = container.scrollLeft;
-          const distance = targetScroll - startScroll;
-          const startTime = performance.now();
-
-          // Custom scroll animation to match map animation duration
-          const animateScroll = (currentTime) => {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
-
-            // Easing function (ease-out)
-            const easeOut = 1 - Math.pow(1 - progress, 3);
-
-            container.scrollLeft = startScroll + distance * easeOut;
-
-            if (progress < 1) {
-              requestAnimationFrame(animateScroll);
-            }
-          };
-
-          requestAnimationFrame(animateScroll);
+          const targetScroll = calculateCenterScrollPosition(cardElement, container);
+          animateScroll(container, targetScroll, ANIMATION.DURATION);
         }
       }
     }

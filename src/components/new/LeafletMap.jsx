@@ -9,12 +9,15 @@ import {
 import L from "leaflet";
 import MapActionButton from "./MapActionButton";
 
+// utils
+import { MAP_CONFIG, MARKER_CONFIG, TILE_CONFIG } from "../../utils/constants";
+
 // styles
 import "../../assets/styles/leaflet-map.css";
 
-// Animation duration constants (in milliseconds) - synced across components
-export const ANIMATION_DURATION = 800; // 0.8 seconds for map pan and card scroll
-export const POPUP_DELAY = 700; // Start opening popup during animation for synchronized feel (70% through animation)
+// Export for backward compatibility
+export const ANIMATION_DURATION = MAP_CONFIG.ANIMATION_DURATION;
+export const POPUP_DELAY = MAP_CONFIG.POPUP_DELAY;
 
 // Fix Leaflet default icon issue
 delete L.Icon.Default.prototype._getIconUrl;
@@ -29,8 +32,8 @@ L.Icon.Default.mergeOptions({
 
 // Create purple circular markers with white numbers
 const createCustomIcon = (indicator) => {
-  const size = 24;
-  const purpleColor = "#981FF5"; // Using the primary color from theme
+  const size = MARKER_CONFIG.SIZE;
+  const purpleColor = MARKER_CONFIG.COLOR;
 
   return L.divIcon({
     className: "custom-marker",
@@ -97,7 +100,7 @@ function MapMarkerController({ places, selectedMarkerId, markerRefs }) {
         // Pan and zoom to selected marker
         map.setView([selectedPlace.lat, selectedPlace.lng], 15, {
           animate: true,
-          duration: ANIMATION_DURATION / 1000, // Convert ms to seconds
+          duration: MAP_CONFIG.ANIMATION_DURATION / 1000, // Convert ms to seconds
         });
 
         // Open popup for selected marker - synced with animation
@@ -106,7 +109,7 @@ function MapMarkerController({ places, selectedMarkerId, markerRefs }) {
           if (marker) {
             marker.openPopup();
           }
-        }, POPUP_DELAY);
+        }, MAP_CONFIG.POPUP_DELAY);
       }
     }
   }, [selectedMarkerId, places, map, markerRefs]);
@@ -152,8 +155,8 @@ function MapClickHandler({ markerRefs, onMapClick }) {
 
 const LeafletMap = ({ places = [], selectedMarkerId = null, onMarkerDeselect = null, onMarkerSelect = null }) => {
   // Default center coordinates (Austin, TX)
-  const center = [30.2672, -97.7431];
-  const zoom = 13;
+  const center = MAP_CONFIG.DEFAULT_CENTER;
+  const zoom = MAP_CONFIG.DEFAULT_ZOOM;
 
   // Ref to store marker references
   const markerRefs = useRef({});
@@ -168,8 +171,8 @@ const LeafletMap = ({ places = [], selectedMarkerId = null, onMarkerDeselect = n
   
   // Build tile URL with API key if available
   const tileUrl = stadiaMapsApiKey 
-    ? `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=${stadiaMapsApiKey}`
-    : "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png";
+    ? `${TILE_CONFIG.BASE_URL}?api_key=${stadiaMapsApiKey}`
+    : TILE_CONFIG.BASE_URL;
 
   return (
     <div className="leaflet-map-container">
@@ -185,10 +188,10 @@ const LeafletMap = ({ places = [], selectedMarkerId = null, onMarkerDeselect = n
         keyboard={true}
       >
         <TileLayer
-          attribution=''
+          attribution={TILE_CONFIG.ATTRIBUTION}
           url={tileUrl}
-          maxZoom={19}
-          minZoom={3}
+          maxZoom={MAP_CONFIG.MAX_ZOOM}
+          minZoom={MAP_CONFIG.MIN_ZOOM}
         />
 
         <MapBoundsController places={placesWithCoords} />

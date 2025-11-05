@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from "react";
 
+// utils
+import { LOADING_MESSAGES, ANIMATION } from "../../utils/constants";
+import { randomArrayIndex } from "../../utils/eventUtils";
+
 // styles
 import "../../assets/styles/loading.css";
 
-const messages = [
-  "Checking where everyone's riding…",
-  "Analyzing millions of Fetii trips…",
-  "Fetii AI is thinking…",
-  "Tracking the pulse of the city…",
-  "Finding where the crowd's heading…",
-];
-
 const LoadingUI = ({ isVisible = true }) => {
-  const min = 0;
-  const max = messages.length - 1;
-  const randomStartIndex = Math.floor(Math.random() * (max - min + 1)) + min;
-  const [currentMessageIndex, setCurrentMessageIndex] = useState(randomStartIndex);
+  const messages = LOADING_MESSAGES.UI;
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(() => 
+    randomArrayIndex(messages)
+  );
 
   useEffect(() => {
     if (!isVisible) return;
     
     const interval = setInterval(() => {
       setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
-    }, 3000);
+    }, ANIMATION.LOADING_UI_MESSAGE_ROTATION_INTERVAL);
 
     return () => clearInterval(interval);
   }, [messages.length, isVisible]);

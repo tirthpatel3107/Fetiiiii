@@ -8,37 +8,18 @@ import PlaceCardWrapper from "../../components/new/PlaceCardWrapper";
 import LeafletMap from "../../components/new/LeafletMap";
 import LoadingUI from "../../components/new/LoadingUI";
 
+// hooks
+import useResolution from "../../hooks/useResolution";
+
+// utils
+import { findMessageWithCards, createUserMessage, createLoadingMessage } from "../../utils/messageUtils";
+import { MESSAGE_TYPES } from "../../utils/constants";
+
 // data
 import mockData from "../../data/mockData.json";
 
 // styles
 import "../../assets/styles/dashboard.css";
-
-/* Desktop breakpoint width (in pixels) */
-const DESKTOP_BREAKPOINT = 1024;
-
-/**
- * Helper function to find a message with cards from conversation history
- * @param {Array} conversationHistory - Array of conversation messages
- * @param {number|null} selectedMessageId - ID of the selected message
- * @returns {Object|null} Message object with cards or null
- */
-const findMessageWithCards = (conversationHistory, selectedMessageId) => {
-  // If a specific message is selected, try to find it
-  if (selectedMessageId) {
-    const selectedMessage = conversationHistory.find(
-      msg => msg.id === selectedMessageId && msg.cards && msg.cards.length > 0
-    );
-    if (selectedMessage) {
-      return selectedMessage;
-    }
-  }
-
-  // Fall back to latest message with cards
-  return [...conversationHistory]
-    .reverse()
-    .find(msg => msg.cards && msg.cards.length > 0) || null;
-};
 
 /* NewDashboard Component */
 const NewDashboard = () => {
@@ -64,18 +45,13 @@ const NewDashboard = () => {
     return !isLoading && currentMessageWithCards && currentMessageWithCards.cards?.length > 0;
   }, [isLoading, currentMessageWithCards]);
 
-  /* Handle window resize - on desktop, sidebar should always be open - Automatically opens sidebar on desktop screens (>1024px) */
+  // Use common resolution detection hook
+  const { isDesktop } = useResolution();
+
+  /* Handle window resize - on desktop, sidebar should always be open - Automatically opens sidebar on desktop screens */
   useEffect(() => {
-    const handleResize = () => {
-      setIsSidebarOpen(window.innerWidth > DESKTOP_BREAKPOINT);
-    };
-
-    // Set initial state based on screen size
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    setIsSidebarOpen(isDesktop);
+  }, [isDesktop]);
 
   /* Toggles sidebar open/closed state */
   const toggleSidebar = () => {
@@ -100,25 +76,11 @@ const NewDashboard = () => {
     setIsLoading(true);
 
     // Add user message to conversation history
-    const userMessage = {
-      id: Date.now(),
-      type: 'user',
-      message: message,
-      timestamp: new Date(),
-    };
-
+    const userMessage = createUserMessage(message);
     setConversationHistory(prev => [...prev, userMessage]);
 
     // Add loading message
-    const loadingMessageId = Date.now() + 1;
-    const loadingMessage = {
-      id: loadingMessageId,
-      type: 'assistant',
-      message: '',
-      isLoading: true,
-      timestamp: new Date(),
-    };
-
+    const loadingMessage = createLoadingMessage();
     setConversationHistory(prev => [...prev, loadingMessage]);
 
     // Set 7 second interval before showing mock response
@@ -137,11 +99,10 @@ const NewDashboard = () => {
       let newMessageId = null;
       setConversationHistory(prev => {
         const updated = prev.map(msg => {
-          if (msg.isLoading && msg.type === 'assistant') {
+          if (msg.isLoading && msg.type === MESSAGE_TYPES.ASSISTANT) {
             newMessageId = msg.id; // Store the ID of the message being created
             return {
-              id: msg.id,
-              type: 'assistant',
+              ...msg,
               message: mockResponse.message,
               isLoading: false,
               cards: mockResponse.cards || [],

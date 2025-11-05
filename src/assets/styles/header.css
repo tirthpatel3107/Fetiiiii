@@ -15,10 +15,10 @@
 /* Hamburger Menu Button */
 .hamburger-menu-button {
   position: fixed;
-  left: 20px;
+  left: 15px;
   top: 20px;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   background: rgba(45, 59, 78, 0.9);
   border: none;
   border-radius: 8px;
@@ -45,8 +45,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 20px;
-  height: 16px;
+  width: 16px;
+  height: 12px;
 }
 
 .hamburger-icon span {
@@ -62,13 +62,25 @@
 @media (max-width: 1024px) {
   .app-header {
     display: flex;
+    padding: 0 15px;
   }
 
-  /* When sidebar is open, position hamburger on left side of logo (over the sidebar) */
+  /* Align hamburger with logo */
+  .hamburger-menu-button {
+    left: 16px;
+    top: 16px;
+    background: rgba(45, 59, 78, 0.9);
+  }
+
+  /* When sidebar is open, position hamburger aligned with logo */
   .hamburger-menu-button.sidebar-open {
-    left: 38px;
-    top: 38px;
+    left: 16px;
+    top: 25px;
     z-index: 1003; /* Above sidebar content */
+  }
+
+  .hamburger-menu-button:hover {
+    background: rgba(45, 59, 78, 1);
   }
 }
 
