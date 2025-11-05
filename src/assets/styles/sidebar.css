@@ -110,14 +110,7 @@
 .sidebar-logo-container img {
   position: relative;
   z-index: 11;
-}
-
-/* Make logo smaller for mobile/tablet */
-@media (max-width: 1024px) {
-  .sidebar-logo-container img {
-    max-width: 80%;
-    height: auto;
-  }
+  max-width: 48px;
 }
 
 /* Sidebar Logo Image */
