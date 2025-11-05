@@ -12,6 +12,9 @@ import useScrollToBottom from "../../hooks/useScrollToBottom";
 import useScrollDetection from "../../hooks/useScrollDetection";
 import useLoadingMessageRotation from "../../hooks/useLoadingMessageRotation";
 
+// components
+import AnimatedMessage from "./AnimatedMessage";
+
 // utils
 import { QUICK_SUGGESTIONS, LOADING_MESSAGES, UI, MESSAGE_TYPES } from "../../utils/constants";
 
@@ -192,7 +195,12 @@ const Sidebar = ({
                         }}
                       >
                         <div className="sidebar-message-content">
-                          {msg.message}
+                          <AnimatedMessage 
+                            message={msg.message} 
+                            messageId={msg.id}
+                            speed={50}
+                            scrollContainerRef={contentSectionRef}
+                          />
                         </div>
                         <div
                           className="msg-bottom-wrapper left-msg-arrow"
