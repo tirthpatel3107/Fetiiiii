@@ -111,6 +111,7 @@
   position: relative;
   z-index: 11;
   max-width: 48px;
+  margin-top: 7px;
 }
 
 /* Sidebar Logo Image */
@@ -520,6 +521,7 @@ textarea.sidebar-textarea-field:-ms-input-placeholder {
   padding: 18px 22px !important;
   display: flex;
   align-items: center;
+  font-style: italic;
 }
 
 /* Fix alignment for loading dots and content at ≤1024px */
