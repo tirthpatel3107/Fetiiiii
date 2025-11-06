@@ -106,21 +106,18 @@ const NewDashboard = () => {
       const webhookPath = import.meta.env.VITE_WEBHOOK_PATH || "";
       const instanceId = import.meta.env.VITE_INSTANCE_ID || "";
 
-      const response = await fetch(
-        `https://fetii.app.n8n.cloud${webhookPath}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Instance-Id": instanceId,
-          },
-          body: JSON.stringify({
-            action: "sendMessage",
-            sessionId: "web-session-" + Date.now(),
-            chatInput: currentMessage,
-          }),
-        }
-      );
+      const response = await fetch(`${webhookPath}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Instance-Id": instanceId,
+        },
+        body: JSON.stringify({
+          action: "sendMessage",
+          sessionId: "web-session-" + Date.now(),
+          chatInput: currentMessage,
+        }),
+      });
 
       if (response.ok) {
         const data = await response.json();
