@@ -5,7 +5,11 @@ import PlaceCard from "./common/PlaceCard";
 
 // utils
 import { ANIMATION, UI } from "../../utils/constants";
-import { isElementFullyVisible, calculateCenterScrollPosition, animateScroll } from "../../utils/domUtils";
+import {
+  isElementFullyVisible,
+  calculateCenterScrollPosition,
+  animateScroll,
+} from "../../utils/domUtils";
 import { handleClickWithDragCheck } from "../../utils/eventUtils";
 
 // styles
@@ -34,7 +38,7 @@ const PlaceCardWrapper = ({
     setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
     setScrollLeft(scrollContainerRef.current.scrollLeft);
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.classList.add('grabbing');
+      scrollContainerRef.current.classList.add("grabbing");
     }
   };
 
@@ -43,7 +47,7 @@ const PlaceCardWrapper = ({
     setIsDragging(false);
     setHasMoved(false);
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.classList.remove('grabbing');
+      scrollContainerRef.current.classList.remove("grabbing");
     }
   };
 
@@ -52,7 +56,7 @@ const PlaceCardWrapper = ({
     setIsDragging(false);
     setHasMoved(false);
     if (scrollContainerRef.current) {
-      scrollContainerRef.current.classList.remove('grabbing');
+      scrollContainerRef.current.classList.remove("grabbing");
     }
   };
 
@@ -74,9 +78,13 @@ const PlaceCardWrapper = ({
 
   /* Handles card click - only trigger if not dragging */
   const handleCardClick = (index) => {
-    handleClickWithDragCheck(null, () => onCardClick?.(index), hasMoved, isDragging);
+    handleClickWithDragCheck(
+      null,
+      () => onCardClick?.(index),
+      hasMoved,
+      isDragging,
+    );
   };
-
 
   // Scroll to selected card when selectedCardIndex changes
   useEffect(() => {
@@ -94,7 +102,10 @@ const PlaceCardWrapper = ({
 
         // If card is not fully visible, scroll to center it with synced animation
         if (!isCardVisible) {
-          const targetScroll = calculateCenterScrollPosition(cardElement, container);
+          const targetScroll = calculateCenterScrollPosition(
+            cardElement,
+            container,
+          );
           animateScroll(container, targetScroll, ANIMATION.DURATION);
         }
       }

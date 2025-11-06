@@ -1,7 +1,3 @@
-/**
- * Application-wide constants
- */
-
 // Map Configuration
 export const MAP_CONFIG = {
   DEFAULT_CENTER: [30.2672, -97.7431], // Austin, TX coordinates
@@ -22,8 +18,8 @@ export const ANIMATION = {
 
 // Message Types
 export const MESSAGE_TYPES = {
-  USER: 'user',
-  ASSISTANT: 'assistant',
+  USER: "user",
+  ASSISTANT: "assistant",
 };
 
 // UI Constants
@@ -68,7 +64,7 @@ export const MARKER_CONFIG = {
 
 // Map Tile Configuration
 export const TILE_CONFIG = {
-  BASE_URL: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+  BASE_URL:
+    "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
   ATTRIBUTION: "",
 };
-

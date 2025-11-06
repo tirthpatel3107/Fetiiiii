@@ -7,15 +7,16 @@ import { randomArrayIndex } from "../../utils/eventUtils";
 // styles
 import "../../assets/styles/loading.css";
 
+/* LoadingUI Component */
 const LoadingUI = ({ isVisible = true }) => {
   const messages = LOADING_MESSAGES.UI;
-  const [currentMessageIndex, setCurrentMessageIndex] = useState(() => 
-    randomArrayIndex(messages)
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(() =>
+    randomArrayIndex(messages),
   );
 
   useEffect(() => {
     if (!isVisible) return;
-    
+
     const interval = setInterval(() => {
       setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % messages.length);
     }, ANIMATION.LOADING_UI_MESSAGE_ROTATION_INTERVAL);

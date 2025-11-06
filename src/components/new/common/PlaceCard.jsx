@@ -44,7 +44,7 @@ const PlaceCard = ({
         <p className="place-card-subtitle">
           {address} <span className="place-card-bullet">•</span> {category}
         </p>
-        </div>
+      </div>
     </div>
   );
 };

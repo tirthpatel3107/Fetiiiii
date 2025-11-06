@@ -1,18 +1,10 @@
 import { useEffect, useRef } from "react";
 
+// utils
 import { UI } from "../utils/constants";
-import { scrollToBottom } from "../utils/domUtils";
-import { getComputedStyleInt } from "../utils/domUtils";
+import { scrollToBottom, getComputedStyleInt } from "../utils/domUtils";
 
-/**
- * Custom hook for auto-growing textarea that adjusts height based on content
- * @param {string} value - The textarea value
- * @param {Object} options - Configuration options
- * @param {number} options.maxRows - Maximum number of rows (default: UI.TEXTAREA_MAX_ROWS)
- * @param {number} options.defaultLineHeight - Default line height in pixels (default: UI.TEXTAREA_DEFAULT_LINE_HEIGHT)
- * @param {React.RefObject} options.scrollContainerRef - Optional ref to scroll container when textarea expands
- * @returns {React.RefObject} Ref to attach to the textarea element
- */
+/* Custom hook for auto-growing textarea that adjusts height based on content */
 const useAutoGrowTextarea = (value, options = {}) => {
   const textareaRef = useRef(null);
   const {
@@ -28,7 +20,11 @@ const useAutoGrowTextarea = (value, options = {}) => {
     // Reset height to auto to get accurate scrollHeight
     textarea.style.height = "auto";
     const scrollHeight = textarea.scrollHeight;
-    const lineHeight = getComputedStyleInt(textarea, "lineHeight", defaultLineHeight);
+    const lineHeight = getComputedStyleInt(
+      textarea,
+      "lineHeight",
+      defaultLineHeight,
+    );
     const maxHeight = lineHeight * maxRows;
 
     // Set height based on content, with max constraint
@@ -51,4 +47,3 @@ const useAutoGrowTextarea = (value, options = {}) => {
 };
 
 export default useAutoGrowTextarea;
-

@@ -71,7 +71,8 @@
   );
 }
 .place-card.select-item::before {
-  background: linear-gradient(
+  background:
+    linear-gradient(
       0deg,
       rgba(152, 31, 245, 0.3) 0%,
       rgba(152, 31, 245, 0.3) 100%
@@ -96,7 +97,8 @@
   color: white;
   font-weight: 600;
   font-size: 13px;
-  background: linear-gradient(
+  background:
+    linear-gradient(
       180deg,
       rgba(255, 255, 255, 0.15) 0%,
       rgba(255, 255, 255, 0) 100%

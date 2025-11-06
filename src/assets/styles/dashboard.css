@@ -13,9 +13,6 @@
 
 /* ClearResult responsive styles - center on mobile/tablet */
 @media (max-width: 1024px) {
-  .dashboard-wrapper, .leaflet-map-container{
-    height: 100dvh;
-  }
   .clear-result-container {
     left: 0 !important;
     width: 100% !important;

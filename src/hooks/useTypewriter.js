@@ -1,12 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-/**
- * Custom hook for animating text word-by-word (typewriter effect)
- * @param {string} text - The full text to animate
- * @param {number} speed - Delay between words in milliseconds (default: 50)
- * @param {boolean} enabled - Whether the animation is enabled (default: true)
- * @returns {string} The animated text that should be displayed
- */
+/* Custom hook for animating text word-by-word (typewriter effect) */
 const useTypewriter = (text = "", speed = 50, enabled = true) => {
   const [displayedText, setDisplayedText] = useState("");
   const wordsRef = useRef([]);
@@ -49,17 +43,23 @@ const useTypewriter = (text = "", speed = 50, enabled = true) => {
     // Function to display next word
     const displayNextWord = () => {
       if (currentIndexRef.current < wordsRef.current.length) {
-        const wordsToShow = wordsRef.current.slice(0, currentIndexRef.current + 1);
+        const wordsToShow = wordsRef.current.slice(
+          0,
+          currentIndexRef.current + 1,
+        );
         setDisplayedText(wordsToShow.join(""));
         currentIndexRef.current += 1;
-        
+
         // Schedule next word
         timeoutRef.current = setTimeout(displayNextWord, speed);
       }
     };
 
     // Start animation if we have words to display
-    if (wordsRef.current.length > 0 && currentIndexRef.current < wordsRef.current.length) {
+    if (
+      wordsRef.current.length > 0 &&
+      currentIndexRef.current < wordsRef.current.length
+    ) {
       displayNextWord();
     }
 
@@ -84,4 +84,3 @@ const useTypewriter = (text = "", speed = 50, enabled = true) => {
 };
 
 export default useTypewriter;
-

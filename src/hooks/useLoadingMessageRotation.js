@@ -1,22 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 
+// utils
 import { ANIMATION } from "../utils/constants";
 import { findLoadingMessage } from "../utils/messageUtils";
 import { randomArrayIndex } from "../utils/eventUtils";
 
-/**
- * Custom hook for rotating loading messages on mobile
- * @param {boolean} isEnabled - Whether rotation is enabled (e.g., isMobile)
- * @param {Array} conversationHistory - Array of conversation messages
- * @param {Array} messages - Array of loading messages to rotate
- * @param {number} interval - Rotation interval in milliseconds (default: ANIMATION.LOADING_MESSAGE_ROTATION_INTERVAL)
- * @returns {number} Current message index
- */
+/* Custom hook for rotating loading messages on mobile */
 const useLoadingMessageRotation = (
   isEnabled,
   conversationHistory,
   messages,
-  interval = ANIMATION.LOADING_MESSAGE_ROTATION_INTERVAL
+  interval = ANIMATION.LOADING_MESSAGE_ROTATION_INTERVAL,
 ) => {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const loadingMessageIdRef = useRef(null);
@@ -55,4 +49,3 @@ const useLoadingMessageRotation = (
 };
 
 export default useLoadingMessageRotation;
-

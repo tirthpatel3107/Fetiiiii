@@ -1,15 +1,22 @@
 import React, { useState } from "react";
+
+// components
 import RideMap from "../../components/old/RideMap";
 import SimpleChatInterface from "../../components/old/SimpleChatInterface";
 
+// services
 import { analyzeResponseWithGemini } from "../../services/geminiAnalysisService";
+
+// styles
 import "../../index.css";
 
+/* OldDashboard Component */
 function OldDashboard() {
   const [mapLocations, setMapLocations] = useState([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [selectedMarkerId, setSelectedMarkerId] = useState(null);
 
+  /* Handles marker click */
   const handleMarkerClick = (markerId) => {
     setSelectedMarkerId(markerId);
   };

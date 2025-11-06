@@ -4,7 +4,10 @@ import React from "react";
 import useResolution from "../../hooks/useResolution";
 
 // utils
-import { preventDefaultAndStopPropagation, handleKeyboardAccessibility } from "../../utils/eventUtils";
+import {
+  preventDefaultAndStopPropagation,
+  handleKeyboardAccessibility,
+} from "../../utils/eventUtils";
 
 // styles
 import "../../assets/styles/clear-result.css";
@@ -23,8 +26,8 @@ const ClearResult = ({ onClear, isSidebarOpen = false }) => {
   };
 
   return (
-    <div className={`clear-result-container ${shouldHide ? 'hidden' : ''}`}>
-      <button 
+    <div className={`clear-result-container ${shouldHide ? "hidden" : ""}`}>
+      <button
         className="clear-result-button"
         onClick={handleClick}
         onTouchEnd={handleClick}

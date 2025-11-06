@@ -1,12 +1,8 @@
 import React, { useEffect, useMemo, useRef } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  useMap,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
+
+// components
 import MapActionButton from "./MapActionButton";
 
 // utils
@@ -30,7 +26,7 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
 });
 
-// Create purple circular markers with white numbers
+/* Creates a custom purple circular marker icon with white number indicator */
 const createCustomIcon = (indicator) => {
   const size = MARKER_CONFIG.SIZE;
   const purpleColor = MARKER_CONFIG.COLOR;
@@ -61,7 +57,7 @@ const createCustomIcon = (indicator) => {
   });
 };
 
-// Component to handle map bounds adjustment when places are added
+/* MapBoundsController Component - Handles map bounds adjustment when places are added */
 function MapBoundsController({ places }) {
   const map = useMap();
 
@@ -81,7 +77,7 @@ function MapBoundsController({ places }) {
   return null;
 }
 
-// Component to handle marker selection and popup opening
+/* MapMarkerController Component - Handles marker selection and popup opening */
 function MapMarkerController({ places, selectedMarkerId, markerRefs }) {
   const map = useMap();
 
@@ -117,7 +113,7 @@ function MapMarkerController({ places, selectedMarkerId, markerRefs }) {
   return null;
 }
 
-// Component to handle map clicks and close popups when clicking outside
+/* MapClickHandler Component - Handles map clicks and closes popups when clicking outside */
 function MapClickHandler({ markerRefs, onMapClick }) {
   const map = useMap();
 
@@ -125,9 +121,9 @@ function MapClickHandler({ markerRefs, onMapClick }) {
     const handleMapClick = (e) => {
       // Check if click target is not a marker or popup
       const target = e.originalEvent.target;
-      const isMarker = target.closest('.custom-marker');
-      const isPopup = target.closest('.leaflet-popup');
-      
+      const isMarker = target.closest(".custom-marker");
+      const isPopup = target.closest(".leaflet-popup");
+
       // If clicking on the map (not on marker or popup), close all popups
       if (!isMarker && !isPopup) {
         Object.values(markerRefs.current).forEach((marker) => {
@@ -135,7 +131,7 @@ function MapClickHandler({ markerRefs, onMapClick }) {
             marker.closePopup();
           }
         });
-        
+
         // Reset selected marker ID if callback provided
         if (onMapClick) {
           onMapClick();
@@ -143,17 +139,23 @@ function MapClickHandler({ markerRefs, onMapClick }) {
       }
     };
 
-    map.on('click', handleMapClick);
+    map.on("click", handleMapClick);
 
     return () => {
-      map.off('click', handleMapClick);
+      map.off("click", handleMapClick);
     };
   }, [map, markerRefs, onMapClick]);
 
   return null;
 }
 
-const LeafletMap = ({ places = [], selectedMarkerId = null, onMarkerDeselect = null, onMarkerSelect = null }) => {
+/* LeafletMap Component */
+const LeafletMap = ({
+  places = [],
+  selectedMarkerId = null,
+  onMarkerDeselect = null,
+  onMarkerSelect = null,
+}) => {
   // Default center coordinates (Austin, TX)
   const center = MAP_CONFIG.DEFAULT_CENTER;
   const zoom = MAP_CONFIG.DEFAULT_ZOOM;
@@ -161,16 +163,16 @@ const LeafletMap = ({ places = [], selectedMarkerId = null, onMarkerDeselect = n
   // Ref to store marker references
   const markerRefs = useRef({});
 
-  // Filter places that have coordinates (lat and lng from mockResponse)
+  // Filter places that have coordinates (lat and lng)
   const placesWithCoords = useMemo(() => {
     return places.filter((place) => place.lat && place.lng);
   }, [places]);
 
   // Get Stadia Maps API key from environment variable
-  const stadiaMapsApiKey = import.meta.env.VITE_STADIAMAPS_API_KEY || '';
-  
+  const stadiaMapsApiKey = import.meta.env.VITE_STADIAMAPS_API_KEY || "";
+
   // Build tile URL with API key if available
-  const tileUrl = stadiaMapsApiKey 
+  const tileUrl = stadiaMapsApiKey
     ? `${TILE_CONFIG.BASE_URL}?api_key=${stadiaMapsApiKey}`
     : TILE_CONFIG.BASE_URL;
 
@@ -196,13 +198,13 @@ const LeafletMap = ({ places = [], selectedMarkerId = null, onMarkerDeselect = n
 
         <MapBoundsController places={placesWithCoords} />
 
-        <MapMarkerController 
-          places={placesWithCoords} 
+        <MapMarkerController
+          places={placesWithCoords}
           selectedMarkerId={selectedMarkerId}
           markerRefs={markerRefs}
         />
 
-        <MapClickHandler 
+        <MapClickHandler
           markerRefs={markerRefs}
           onMapClick={onMarkerDeselect}
         />
@@ -239,7 +241,9 @@ const LeafletMap = ({ places = [], selectedMarkerId = null, onMarkerDeselect = n
               <div className="custom-popup-content">
                 <div className="popup-header">
                   <div className="popup-indicator-circle">
-                    <span className="popup-indicator-number">{place.indicator}</span>
+                    <span className="popup-indicator-number">
+                      {place.indicator}
+                    </span>
                   </div>
                   <div className="popup-visits-badge">
                     {place.visits} Visits

@@ -1,15 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 
+// utils
 import { UI } from "../utils/constants";
 
-/**
- * Custom hook that detects if content has been scrolled past a threshold
- * @param {number} threshold - Scroll threshold in pixels (default: UI.SCROLL_THRESHOLD)
- * @returns {Object} Object containing containerRef and hasScrolledPastThreshold
- */
+/* Custom hook that detects if content has been scrolled past a threshold */
 const useScrollDetection = (threshold = UI.SCROLL_THRESHOLD) => {
   const containerRef = useRef(null);
-  const [hasScrolledPastThreshold, setHasScrolledPastThreshold] = useState(false);
+  const [hasScrolledPastThreshold, setHasScrolledPastThreshold] =
+    useState(false);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -36,4 +34,3 @@ const useScrollDetection = (threshold = UI.SCROLL_THRESHOLD) => {
 };
 
 export default useScrollDetection;
-

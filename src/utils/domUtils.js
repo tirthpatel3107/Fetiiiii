@@ -1,12 +1,4 @@
-/**
- * DOM manipulation and utility functions
- */
-
-/**
- * Scrolls an element to the bottom
- * @param {HTMLElement} element - The element to scroll
- * @param {number} [delay=0] - Optional delay in milliseconds
- */
+/* Scrolls an element to the bottom */
 export const scrollToBottom = (element, delay = 0) => {
   if (!element) return;
 
@@ -23,12 +15,7 @@ export const scrollToBottom = (element, delay = 0) => {
   }
 };
 
-/**
- * Checks if an element is fully visible within its container
- * @param {HTMLElement} element - The element to check
- * @param {HTMLElement} container - The container element
- * @returns {boolean} True if element is fully visible
- */
+/* Checks if an element is fully visible within its container */
 export const isElementFullyVisible = (element, container) => {
   if (!element || !container) return false;
 
@@ -41,12 +28,7 @@ export const isElementFullyVisible = (element, container) => {
   );
 };
 
-/**
- * Calculates scroll position to center an element in its container
- * @param {HTMLElement} element - The element to center
- * @param {HTMLElement} container - The scroll container
- * @returns {number} Target scroll position
- */
+/* Calculates scroll position to center an element in its container */
 export const calculateCenterScrollPosition = (element, container) => {
   if (!element || !container) return 0;
 
@@ -54,19 +36,10 @@ export const calculateCenterScrollPosition = (element, container) => {
   const elementWidth = element.offsetWidth;
   const containerWidth = container.clientWidth;
 
-  return Math.max(
-    0,
-    elementOffsetLeft - containerWidth / 2 + elementWidth / 2
-  );
+  return Math.max(0, elementOffsetLeft - containerWidth / 2 + elementWidth / 2);
 };
 
-/**
- * Gets computed style value as integer
- * @param {HTMLElement} element - The element
- * @param {string} property - CSS property name
- * @param {number} [defaultValue=0] - Default value if parsing fails
- * @returns {number} Parsed integer value
- */
+/* Gets computed style value as integer */
 export const getComputedStyleInt = (element, property, defaultValue = 0) => {
   if (!element) return defaultValue;
 
@@ -74,27 +47,17 @@ export const getComputedStyleInt = (element, property, defaultValue = 0) => {
   return parseInt(value, 10) || defaultValue;
 };
 
-/**
- * Easing function for smooth animations (ease-out cubic)
- * @param {number} progress - Progress value between 0 and 1
- * @returns {number} Eased progress value
- */
+/* Easing function for smooth animations (ease-out cubic) */
 export const easeOutCubic = (progress) => {
   return 1 - Math.pow(1 - progress, 3);
 };
 
-/**
- * Animated scroll with easing
- * @param {HTMLElement} container - The scroll container
- * @param {number} targetScroll - Target scroll position
- * @param {number} duration - Animation duration in milliseconds
- * @param {Function} [easingFn] - Optional easing function
- */
+/* Animated scroll with easing */
 export const animateScroll = (
   container,
   targetScroll,
   duration,
-  easingFn = easeOutCubic
+  easingFn = easeOutCubic,
 ) => {
   if (!container) return;
 
@@ -116,4 +79,3 @@ export const animateScroll = (
 
   requestAnimationFrame(performAnimation);
 };
-

@@ -16,7 +16,12 @@ import useLoadingMessageRotation from "../../hooks/useLoadingMessageRotation";
 import AnimatedMessage from "./AnimatedMessage";
 
 // utils
-import { QUICK_SUGGESTIONS, LOADING_MESSAGES, UI, MESSAGE_TYPES } from "../../utils/constants";
+import {
+  QUICK_SUGGESTIONS,
+  LOADING_MESSAGES,
+  UI,
+  MESSAGE_TYPES,
+} from "../../utils/constants";
 
 // styles
 import "../../assets/styles/sidebar.css";
@@ -36,11 +41,15 @@ const Sidebar = ({
   const { isMobile, isDesktop } = useResolution();
 
   // Use scroll detection hook for logo styling
-  const { containerRef: contentSectionRef, hasScrolledPastThreshold: contentReachedLogo } = 
-    useScrollDetection(UI.SCROLL_THRESHOLD);
+  const {
+    containerRef: contentSectionRef,
+    hasScrolledPastThreshold: contentReachedLogo,
+  } = useScrollDetection(UI.SCROLL_THRESHOLD);
 
   // Use scroll to bottom hook for conversation history
-  useScrollToBottom(contentSectionRef, [conversationHistory, isLoading], { scrollOnMount: true });
+  useScrollToBottom(contentSectionRef, [conversationHistory, isLoading], {
+    scrollOnMount: true,
+  });
 
   // Use loading message rotation hook for mobile
   const currentLoadingMessageIndex = useLoadingMessageRotation(
@@ -109,21 +118,22 @@ const Sidebar = ({
               {/*===== Suggestions =====*/}
               <div ref={contentSectionRef} className="sidebar-content-section">
                 {/* Show suggestions on desktop always, or on mobile/tablet only when no messages */}
-                {(isDesktop || conversationHistory.length === 0) && QUICK_SUGGESTIONS.map((suggestion, index) => (
-                  <div
-                    key={index}
-                    className={`sidebar-quick-suggestion-item ${
-                      index === QUICK_SUGGESTIONS.length - 1
-                        ? "last-suggestion"
-                        : ""
-                    }`}
-                    onClick={() => handleSuggestionClick(suggestion)}
-                  >
-                    <div className="sidebar-quick-suggestion-text">
-                      {suggestion}
+                {(isDesktop || conversationHistory.length === 0) &&
+                  QUICK_SUGGESTIONS.map((suggestion, index) => (
+                    <div
+                      key={index}
+                      className={`sidebar-quick-suggestion-item ${
+                        index === QUICK_SUGGESTIONS.length - 1
+                          ? "last-suggestion"
+                          : ""
+                      }`}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                    >
+                      <div className="sidebar-quick-suggestion-text">
+                        {suggestion}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
 
                 {/* Show conversation history */}
                 {conversationHistory.map((msg) => (
@@ -171,7 +181,11 @@ const Sidebar = ({
                           {/* Mobile loader with messages */}
                           <div className="sidebar-message-loading-mobile">
                             <div className="sidebar-message-loading-mobile-text">
-                              {LOADING_MESSAGES.SIDEBAR[currentLoadingMessageIndex]}
+                              {
+                                LOADING_MESSAGES.SIDEBAR[
+                                  currentLoadingMessageIndex
+                                ]
+                              }
                             </div>
                             <div className="sidebar-message-loading-mobile-dots">
                               <div className="sidebar-message-loading-mobile-dot"></div>
@@ -184,19 +198,18 @@ const Sidebar = ({
                     ) : (
                       <div
                         className={`sidebar-message sidebar-message-assistant`}
+                        style={{ cursor: "pointer" }}
                         onClick={() => {
-                          if (
-                            msg.cards &&
-                            msg.cards.length > 0 &&
-                            onAssistantMessageClick
-                          ) {
+                          // Allow clicking on all assistant messages
+                          // Handler will determine if cards should be shown or cleared
+                          if (onAssistantMessageClick) {
                             onAssistantMessageClick(msg.id);
                           }
                         }}
                       >
                         <div className="sidebar-message-content">
-                          <AnimatedMessage 
-                            message={msg.message} 
+                          <AnimatedMessage
+                            message={msg.message}
                             messageId={msg.id}
                             speed={50}
                             scrollContainerRef={contentSectionRef}

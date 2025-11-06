@@ -1,21 +1,16 @@
 import { useState, useEffect } from "react";
 
-/**
- * Breakpoint constants for consistent resolution detection
- */
+// Breakpoint constants for consistent resolution detection
 export const BREAKPOINTS = {
-  MOBILE: 767,      // Mobile devices: <= 767px
-  TABLET: 1024,     // Tablet devices: 768px - 1024px
-  DESKTOP: 1025,    // Desktop devices: >= 1025px
+  MOBILE: 767, // Mobile devices: <= 767px
+  TABLET: 1024, // Tablet devices: 768px - 1024px
+  DESKTOP: 1025, // Desktop devices: >= 1025px
 };
 
-/**
- * Custom hook for detecting screen resolution and device type
- * @returns {Object} Object containing isMobile, isTablet, isDesktop, and windowWidth
- */
+/* Custom hook for detecting screen resolution and device type */
 const useResolution = () => {
   const [windowWidth, setWindowWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 0
+    typeof window !== "undefined" ? window.innerWidth : 0,
   );
 
   useEffect(() => {
@@ -35,7 +30,8 @@ const useResolution = () => {
 
   // Calculate device types based on breakpoints
   const isMobile = windowWidth <= BREAKPOINTS.MOBILE;
-  const isTablet = windowWidth > BREAKPOINTS.MOBILE && windowWidth <= BREAKPOINTS.TABLET;
+  const isTablet =
+    windowWidth > BREAKPOINTS.MOBILE && windowWidth <= BREAKPOINTS.TABLET;
   const isDesktop = windowWidth >= BREAKPOINTS.DESKTOP;
   const isMobileOrTablet = windowWidth <= BREAKPOINTS.TABLET;
 
@@ -49,4 +45,3 @@ const useResolution = () => {
 };
 
 export default useResolution;
-
