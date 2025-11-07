@@ -32,11 +32,6 @@ export const UI = {
 };
 
 // Quick Suggestions
-export const QUICK_SUGGESTIONS = [
-  "What are the top 5 drop-off locations?",
-  "Where are college kids frequenting on weekdays?",
-  "How far are riders normally traveling to get to De Nada?",
-];
 
 // Loading Messages
 export const LOADING_MESSAGES = {

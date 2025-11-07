@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 // images
-import LogoIcon from "../../assets/images/logo.svg";
+import LogoIcon from "../../assets/images/fiora-fetii-smaller.svg";
 import InactiveSendIcon from "../../assets/images/inactive-send.svg";
 import ActiveSendIcon from "../../assets/images/active-send.svg";
 
@@ -17,7 +17,6 @@ import AnimatedMessage from "./AnimatedMessage";
 
 // utils
 import {
-  QUICK_SUGGESTIONS,
   LOADING_MESSAGES,
   UI,
   MESSAGE_TYPES,
@@ -118,22 +117,18 @@ const Sidebar = ({
               {/*===== Suggestions =====*/}
               <div ref={contentSectionRef} className="sidebar-content-section">
                 {/* Show suggestions on desktop always, or on mobile/tablet only when no messages */}
-                {(isDesktop || conversationHistory.length === 0) &&
-                  QUICK_SUGGESTIONS.map((suggestion, index) => (
-                    <div
-                      key={index}
-                      className={`sidebar-quick-suggestion-item ${
-                        index === QUICK_SUGGESTIONS.length - 1
-                          ? "last-suggestion"
-                          : ""
-                      }`}
-                      onClick={() => handleSuggestionClick(suggestion)}
-                    >
-                      <div className="sidebar-quick-suggestion-text">
-                        {suggestion}
+                {/* Show intro placeholder only when no messages */}
+                  {conversationHistory.length === 0 && (
+                    <div className="sidebar-quick-suggestion-item last-suggestion intro-placeholder">
+                      <div className="sidebar-quick-suggestion-text" style={{ pointerEvents: "none" }}>
+                        Hi, I’m Fiora! <br /><br />
+                        I use Fetii’s real-world travel insights to show you the most popular places to go and the best things to do around town.
+                        <br /><br />
+                        Just tell me what you’re looking for, and I’ll take care of the rest!
                       </div>
                     </div>
-                  ))}
+                  )}
+
 
                 {/* Show conversation history */}
                 {conversationHistory.map((msg) => (
@@ -257,7 +252,7 @@ const Sidebar = ({
               <div className="sidebar-input-container">
                 <textarea
                   ref={textareaRef}
-                  placeholder="Ask about Austin..."
+                  placeholder="Ask Fiora anything..."
                   className="sidebar-textarea-field"
                   value={inputValue}
                   onChange={handleInputChange}

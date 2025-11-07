@@ -112,7 +112,7 @@
 .sidebar-logo-container img {
   position: relative;
   z-index: 11;
-  max-width: 48px;
+  max-width: 85px;
   margin-top: 7px;
 }
 
@@ -914,4 +914,39 @@ textarea.sidebar-textarea-field:-ms-input-placeholder {
       rgba(0, 0, 0, 1) 100%
     );
   }
+
+
+}
+/* INTRO PLACEHOLDER OVERRIDES */
+.intro-placeholder {
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  cursor: default !important;
+}
+
+.intro-placeholder .sidebar-quick-suggestion-text {
+  text-align: left !important;
+}
+
+/* Mobile override */
+@media (max-width: 1024px) {
+  .intro-placeholder {
+    width: 100% !important;
+    align-self: flex-start !important;
+  }
+
+  .intro-placeholder .sidebar-quick-suggestion-text {
+    width: 100% !important;
+    text-align: left !important;
+  }
+}
+
+.sidebar-content-section:has(.intro-placeholder) {
+  justify-content: flex-end !important;
+}
+
+.intro-placeholder {
+  margin-top: auto !important;
+  margin-bottom: 12px !important;
 }

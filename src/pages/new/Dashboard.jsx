@@ -24,7 +24,7 @@ import { MESSAGE_TYPES } from "../../utils/constants";
 
 // styles
 import "../../assets/styles/dashboard.css";
-
+console.log("hello");
 /* NewDashboard Component */
 const NewDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -106,7 +106,7 @@ const NewDashboard = () => {
       const webhookPath = import.meta.env.VITE_WEBHOOK_PATH || "";
       const instanceId = import.meta.env.VITE_INSTANCE_ID || "";
 
-      const response = await fetch(`${webhookPath}`, {
+      const response = await fetch(webhookPath, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -6,7 +6,6 @@ import "../../../assets/styles/card.css";
 /* PlaceCard Component */
 const PlaceCard = ({
   indicator,
-  visits,
   title,
   selectedCardIndex,
   currnetIndex,
@@ -32,8 +31,7 @@ const PlaceCard = ({
         {/* Top-left circle indicator */}
         <div className="place-card-indicator">{indicator}</div>
 
-        {/* Top-right visits tag */}
-        <div className="place-card-visits">{visits} Visits</div>
+       
       </div>
 
       <div className="address-scroll">
