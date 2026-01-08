@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 
 // hooks
 import useTypewriter from "../../hooks/useTypewriter";
@@ -19,6 +19,7 @@ const AnimatedMessage = ({
   const previousMessageRef = useRef("");
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const previousDisplayedTextRef = useRef("");
+  const containsHtml = useMemo(() => /<[^>]+>/.test(message), [message]);
 
   // Determine if we should animate this message
   useEffect(() => {
@@ -29,8 +30,9 @@ const AnimatedMessage = ({
       previousMessageRef.current.trim().length === 0;
     const isNewContent = hasContent && wasEmpty;
     const notAnimatedYet = !animatedMessageIds.has(messageId);
+    const allowAnimation = !containsHtml;
 
-    if (isNewContent && notAnimatedYet) {
+    if (isNewContent && notAnimatedYet && allowAnimation) {
       setShouldAnimate(true);
       animatedMessageIds.add(messageId);
     } else if (!hasContent) {
@@ -60,6 +62,10 @@ const AnimatedMessage = ({
       previousDisplayedTextRef.current = displayedText;
     }
   }, [displayedText, shouldAnimate, scrollContainerRef]);
+
+  if (containsHtml) {
+    return <span dangerouslySetInnerHTML={{ __html: displayedText }} />;
+  }
 
   return <>{displayedText}</>;
 };

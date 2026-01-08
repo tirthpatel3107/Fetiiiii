@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 // images
 import LogoIcon from "../../assets/images/fiora-fetii-smaller.svg";
@@ -25,6 +25,18 @@ import {
 // styles
 import "../../assets/styles/sidebar.css";
 
+// Detects iOS/iPadOS devices so we can adjust keyboard behavior
+const isAppleMobileDevice = () => {
+  if (typeof navigator === "undefined") return false;
+
+  const userAgent = navigator.userAgent || "";
+  const isIOS = /iPhone|iPad|iPod/i.test(userAgent);
+  const isIPadOS =
+    navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+
+  return isIOS || isIPadOS;
+};
+
 /* Sidebar Component */
 const Sidebar = ({
   isOpen = true,
@@ -35,6 +47,9 @@ const Sidebar = ({
   onAssistantMessageClick = null,
 }) => {
   const [inputValue, setInputValue] = useState("");
+
+  // Cache apple mobile detection to keep key handler simple
+  const isAppleMobile = useMemo(() => isAppleMobileDevice(), []);
 
   // Use common resolution detection hook
   const { isMobile, isDesktop } = useResolution();
@@ -261,6 +276,12 @@ const Sidebar = ({
                   onChange={handleInputChange}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
+                      if (isAppleMobile) {
+                        e.preventDefault();
+                        // Blur to dismiss the on-screen keyboard on iOS/iPadOS
+                        textareaRef.current?.blur();
+                        return;
+                      }
                       e.preventDefault();
                       handleSendClick();
                     }
