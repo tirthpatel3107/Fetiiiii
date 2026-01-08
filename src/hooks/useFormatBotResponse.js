@@ -52,6 +52,9 @@ const useFormatBotResponse = () => {
     // Clean up: remove leading/trailing newlines
     formatted = formatted.replace(/^\n+/, "").replace(/\n+$/, "");
 
+    formatted = formatted.replace(/^\d+\.\s*$/gm, "");
+
+
     return formatted;
   }, []);
 

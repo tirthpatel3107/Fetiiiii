@@ -245,9 +245,7 @@ const LeafletMap = ({
                       {place.indicator}
                     </span>
                   </div>
-                  <div className="popup-visits-badge">
-                    {place.visits} Visits
-                  </div>
+                  
                 </div>
                 <div className="popup-body">
                   <h3 className="popup-title">{place.title}</h3>

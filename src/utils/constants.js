@@ -38,14 +38,14 @@ export const LOADING_MESSAGES = {
   SIDEBAR: [
     "Checking where everyone's riding",
     "Analyzing millions of Fetii trips",
-    "Fetii AI is thinking",
+    "Fiora is thinking...",
     "Tracking the pulse of the city",
     "Finding where the crowd's heading",
   ],
   UI: [
     "Checking where everyone's riding…",
     "Analyzing millions of Fetii trips…",
-    "Fetii AI is thinking…",
+    "Fiora is thinking…",
     "Tracking the pulse of the city…",
     "Finding where the crowd's heading…",
   ],

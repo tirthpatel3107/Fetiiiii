@@ -130,7 +130,6 @@ const PlaceCardWrapper = ({
         >
           <PlaceCard
             indicator={place.indicator}
-            visits={place.visits}
             title={place.title}
             selectedCardIndex={selectedCardIndex}
             currnetIndex={index}

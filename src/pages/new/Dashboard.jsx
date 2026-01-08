@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
+
 
 // components
 import Sidebar from "../../components/new/Sidebar";
@@ -10,8 +11,7 @@ import LoadingUI from "../../components/new/LoadingUI";
 
 // hooks
 import useFormatBotResponse from "../../hooks/useFormatBotResponse";
-
-// services
+import useUserCity from "../../hooks/useUserCity";
 import { analyzeResponseWithGemini } from "../../services/geminiAnalysisService";
 
 // utils
@@ -24,232 +24,236 @@ import { MESSAGE_TYPES } from "../../utils/constants";
 
 // styles
 import "../../assets/styles/dashboard.css";
-console.log("hello");
-/* NewDashboard Component */
+
 const NewDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [conversationHistory, setConversationHistory] = useState([]);
   const [selectedMarkerId, setSelectedMarkerId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedMessageId, setSelectedMessageId] = useState(null); // Track which assistant message is selected
-  const timeoutRef = useRef(null);
+  const [selectedMessageId, setSelectedMessageId] = useState(null);
+  const sessionIdRef = useRef("web-session-" + crypto.randomUUID());
 
-  // Computed: Find the current message with cards to display
-  const currentMessageWithCards = useMemo(() => {
-    return findMessageWithCards(conversationHistory, selectedMessageId);
-  }, [conversationHistory, selectedMessageId]);
+  const userCity = useUserCity();
+  const formatBotResponse = useFormatBotResponse();
 
-  // Computed: Cards to display on map (only those with coordinates)
+  /* =========================
+     Derived state
+  ========================= */
+
+  const currentMessageWithCards = useMemo(
+    () => findMessageWithCards(conversationHistory, selectedMessageId),
+    [conversationHistory, selectedMessageId]
+  );
+
   const mapPlaces = useMemo(() => {
-    // Don't show any cards if loading or if no message with cards is selected
     if (isLoading || !currentMessageWithCards?.cards) return [];
-
-    // If cards array is empty, don't show any place cards on the map
-    if (currentMessageWithCards.cards.length === 0) return [];
-
-    // Filter cards to only show those with coordinates
-    return currentMessageWithCards.cards.filter((card) => card.lat && card.lng);
+    return currentMessageWithCards.cards.filter((c) => c.lat && c.lng);
   }, [isLoading, currentMessageWithCards]);
 
-  // Computed: Cards to display in card wrapper (all cards, including those without coordinates)
   const displayCards = useMemo(() => {
     if (isLoading || !currentMessageWithCards?.cards) return [];
     return currentMessageWithCards.cards;
   }, [isLoading, currentMessageWithCards]);
 
-  // Computed: Whether to show cards section
-  const shouldShowCards = useMemo(() => {
-    return (
+  const shouldShowCards = useMemo(
+    () =>
       !isLoading &&
       currentMessageWithCards &&
-      currentMessageWithCards.cards?.length > 0
-    );
-  }, [isLoading, currentMessageWithCards]);
+      currentMessageWithCards.cards?.length > 0,
+    [isLoading, currentMessageWithCards]
+  );
 
-  // Use format bot response hook
-  const formatBotResponse = useFormatBotResponse();
+  /* =========================
+     UI handlers
+  ========================= */
 
-  /* Toggles sidebar open/closed state */
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => !prev);
-  };
+  const toggleSidebar = () => setIsSidebarOpen((p) => !p);
+  const closeSidebar = () => setIsSidebarOpen(false);
 
-  /* Closes the sidebar (used for overlay click on mobile/tablet) */
-  const closeSidebar = () => {
-    setIsSidebarOpen(false);
-  };
+  /* =========================
+     STREAMING
+     Loading ends on FIRST token
+  ========================= */
 
-  /* Handles API call when suggestion is clicked or message is sent */
-  const handleAssistantCall = async (message) => {
-    // Clear any existing timeout
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
+const handleAssistantCall = async (message) => {
+  const sessionId = sessionIdRef.current;
+
+
+  setSelectedMarkerId(null);
+  setSelectedMessageId(null);
+  setIsLoading(true);
+
+  const assistantMessageId = crypto.randomUUID();
+  let accumulated = "";
+  let buffer = "";
+  let firstToken = true;
+
+  setConversationHistory((prev) => [
+    ...prev,
+    createUserMessage(message),
+    {
+      id: assistantMessageId,
+      type: MESSAGE_TYPES.ASSISTANT,
+      message: "",
+      isLoading: true,
+      cards: [],
+      timestamp: new Date(),
+    },
+  ]);
+
+  try {
+    const response = await fetch(import.meta.env.VITE_WEBHOOK_PATH || "", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Instance-Id": import.meta.env.VITE_INSTANCE_ID || "",
+      },
+      body: JSON.stringify({
+        action: "sendMessage",
+        sessionId,
+        chatInput: message,
+        user_city: userCity || "Austin",
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
     }
 
-    // Clear previous results and reset selected marker when loading starts
-    setSelectedMarkerId(null);
-    setSelectedMessageId(null); // Clear selected message when new query starts
-    setIsLoading(true);
+    if (!response.body) {
+      throw new Error("No response body (streaming unsupported)");
+    }
 
-    // Add user message to conversation history
-    const userMessage = createUserMessage(message);
-    setConversationHistory((prev) => [...prev, userMessage]);
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
 
-    // Add loading message
-    const loadingMessage = createLoadingMessage();
-    setConversationHistory((prev) => [...prev, loadingMessage]);
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
 
-    const currentMessage = message;
+      buffer += decoder.decode(value, { stream: true });
 
-    try {
-      const webhookPath = import.meta.env.VITE_WEBHOOK_PATH || "";
-      const instanceId = import.meta.env.VITE_INSTANCE_ID || "";
+      // Split safely on newlines (SSE-friendly)
+      const lines = buffer.split("\n");
+      buffer = lines.pop(); // keep incomplete fragment
 
-      const response = await fetch(webhookPath, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Instance-Id": instanceId,
-        },
-        body: JSON.stringify({
-          action: "sendMessage",
-          sessionId: "web-session-" + Date.now(),
-          chatInput: currentMessage,
-        }),
-      });
+      for (let line of lines) {
+        line = line.trim();
+        if (!line) continue;
 
-      if (response.ok) {
-        const data = await response.json();
+        let token = "";
 
-        // Format the response text
-        const rawMessage =
-          data?.output || data?.message || "Response received successfully.";
-        const formattedMessage = formatBotResponse(rawMessage);
-
-        // Analyze response with Gemini to extract cards from the response text
-        let cards = [];
-
-        try {
-          const analysis = await analyzeResponseWithGemini(formattedMessage);
-
-          if (
-            analysis.visualizationType === "map" &&
-            analysis.mapData &&
-            analysis.mapData.length > 0
-          ) {
-            // Create cards from geocoded data
-            cards = analysis.mapData.map((geo, index) => ({
-              indicator: index + 1,
-              visits: geo.visits || 0,
-              title: geo.name || "Location",
-              address: geo.formatted_address || geo.address || "",
-              category: geo.category || "Location",
-              lat: geo.lat,
-              lng: geo.lng,
-            }));
+        // CASE 1: SSE format → data: ...
+        if (line.startsWith("data:")) {
+          token = line.slice(5).trim();
+        }
+        // CASE 2: JSON chunk
+        else if (line.startsWith("{")) {
+          try {
+            const parsed = JSON.parse(line);
+            token = parsed.content || parsed.delta || "";
+          } catch {
+            continue;
           }
-        } catch (error) {
-          console.error("❌ Error analyzing response with Gemini:", error);
-          // Continue with empty cards if analysis fails
+        }
+        // CASE 3: Plain text
+        else {
+          token = line;
         }
 
-        // Replace loading message with actual response
-        let newMessageId = null;
-        setConversationHistory((prev) => {
-          const updated = prev.map((msg) => {
-            if (msg.isLoading && msg.type === MESSAGE_TYPES.ASSISTANT) {
-              newMessageId = msg.id; // Store the ID of the message being created
-              return {
-                ...msg,
-                message: formattedMessage,
-                isLoading: false,
-                cards: cards,
-                timestamp: new Date(),
-              };
-            }
-            return msg;
-          });
-          return updated;
-        });
+        if (!token) continue;
 
-        // Set the newly created message as selected only if it has cards
-        if (newMessageId && cards.length > 0) {
-          setSelectedMessageId(newMessageId);
-        } else if (newMessageId && cards.length === 0) {
-          // If no cards, clear the selection so no place cards are shown on map
-          setSelectedMessageId(null);
+        accumulated += token;
+
+        if (firstToken) {
+          firstToken = false;
+          setIsLoading(false);
         }
 
-        setIsLoading(false);
-      } else {
-        throw new Error(`HTTP ${response.status}`);
+        setConversationHistory((prev) =>
+          prev.map((msg) =>
+            msg.id === assistantMessageId
+              ? {
+                  ...msg,
+                  message: formatBotResponse(accumulated),
+                  isLoading: false,
+                  timestamp: new Date(),
+                }
+              : msg
+          )
+        );
       }
-    } catch (error) {
-      console.error("Error sending message:", error);
+    }
+    const analysis = await analyzeResponseWithGemini(accumulated);
 
-      // Replace loading message with error message
-      let newMessageId = null;
-      setConversationHistory((prev) => {
-        const updated = prev.map((msg) => {
-          if (msg.isLoading && msg.type === MESSAGE_TYPES.ASSISTANT) {
-            newMessageId = msg.id;
-            return {
+  if (
+    analysis.visualizationType === "map" &&
+    analysis.mapData?.length
+  ) {
+    setConversationHistory((prev) =>
+      prev.map((msg) =>
+        msg.id === assistantMessageId
+          ? {
+              ...msg,
+              cards: analysis.mapData.map((item,index) => ({
+                title: item.name,
+                address: item.formatted_address || item.address,
+                lat: item.lat,
+                lng: item.lng,
+                visits: item.visits,
+                category: item.category,
+                indicator: index + 1,
+              })),
+              timestamp: new Date(),
+            }
+          : msg
+      )
+    );
+  }
+  } catch (error) {
+    console.error("Streaming error:", error);
+
+    setConversationHistory((prev) =>
+      prev.map((msg) =>
+        msg.id === assistantMessageId
+          ? {
               ...msg,
               message:
                 "Sorry, there was an error processing your request. Please try again.",
               isLoading: false,
               cards: [],
               timestamp: new Date(),
-            };
-          }
-          return msg;
-        });
-        return updated;
-      });
+            }
+          : msg
+      )
+    );
 
-      setIsLoading(false);
-    }
-  };
+    setIsLoading(false);
+  }
+};
 
-  /* Handles clicking on an assistant message to display its cards */
+
+
+  /* =========================
+     Message selection
+  ========================= */
+
   const handleAssistantMessageClick = (messageId) => {
-    // Find the message
-    const message = conversationHistory.find((msg) => msg.id === messageId);
-    if (message) {
-      // If message has cards, set it as selected to display them
-      if (message.cards && message.cards.length > 0) {
-        setSelectedMessageId(messageId);
-      } else {
-        // If message has no cards, clear selection so no cards are shown on map
-        setSelectedMessageId(null);
-      }
-      // Reset marker selection when switching to a different message
-      setSelectedMarkerId(null);
-    }
+    const msg = conversationHistory.find((m) => m.id === messageId);
+    setSelectedMessageId(msg?.cards?.length ? messageId : null);
+    setSelectedMarkerId(null);
   };
 
-  /* Clears assistant data and resets to initial state */
   const handleClearResults = () => {
-    // Clear any pending timeout
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
     setConversationHistory([]);
     setSelectedMarkerId(null);
     setSelectedMessageId(null);
     setIsLoading(false);
   };
 
-  /* Cleanup timeout on unmount */
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
+  /* =========================
+     Render
+  ========================= */
 
   return (
     <>
@@ -265,7 +269,6 @@ const NewDashboard = () => {
         selectedMessageId={selectedMessageId}
       />
 
-      {/* Cards Section - Only show when not loading and we have cards */}
       {shouldShowCards && (
         <>
           <ClearResult
@@ -280,7 +283,6 @@ const NewDashboard = () => {
         </>
       )}
 
-      {/* Map Section */}
       <div className="dashboard-wrapper">
         <LeafletMap
           places={mapPlaces}

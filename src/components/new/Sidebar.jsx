@@ -119,15 +119,18 @@ const Sidebar = ({
                 {/* Show suggestions on desktop always, or on mobile/tablet only when no messages */}
                 {/* Show intro placeholder only when no messages */}
                   {conversationHistory.length === 0 && (
-                    <div className="sidebar-quick-suggestion-item last-suggestion intro-placeholder">
-                      <div className="sidebar-quick-suggestion-text" style={{ pointerEvents: "none" }}>
-                        Hi, I’m Fiora! <br /><br />
-                        I use Fetii’s real-world travel insights to show you the most popular places to go and the best things to do around town.
-                        <br /><br />
-                        Just tell me what you’re looking for, and I’ll take care of the rest!
+                      <div className="sidebar-quick-suggestion-item last-suggestion intro-placeholder">
+                        <div className="sidebar-quick-suggestion-text" style={{ pointerEvents: "none" }}>
+                          Hi, I’m Fiora!
+                          <br /><br />
+                          I use Fetii’s real-world travel insights to show you the most popular places to go and the best things to do around town.
+                          <br /><br />
+                          You can ask me about bars, restaurants, or anything else, even by age, day of the week, or cuisine.
+                          <br /><br />
+                          Just tell me what you’re looking for, and I’ll take care of the rest!
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
 
                 {/* Show conversation history */}

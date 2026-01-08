@@ -176,7 +176,7 @@ VITE_INSTANCE_ID=your_instance_id_here
 npm run dev
 ```
 
-5. Open your browser and navigate to `http://localhost:5173`
+5. Open your browser and navigate to `http://localhost:3000`
 
 ### Building for Production
 
@@ -219,15 +219,6 @@ src/
 | `VITE_GEOCODING_API_KEY` | Google Maps Geocoding API key for converting addresses to coordinates | Yes |
 | `VITE_WEBHOOK_PATH` | Webhook URL for API calls | Yes |
 | `VITE_INSTANCE_ID` | Instance ID for API authentication | Yes |
-
-## Map Marker Configuration
-
-Markers are displayed as custom purple circular icons with white number indicators:
-
-- **Size**: 24px
-- **Color**: `#981FF5` (Primary purple)
-- **Style**: Circular with gradient effect
-- **Indicator**: Numbered (1, 2, 3, etc.)
 
 ## Acknowledgments
 
