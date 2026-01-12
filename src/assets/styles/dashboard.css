@@ -11,6 +11,7 @@
 .dashboard-wrapper {
   min-height: 0;
   overflow-y: hidden;
+  overflow: hidden;
 }
 }
 

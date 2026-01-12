@@ -159,6 +159,8 @@
   .sidebar-content-section > .sidebar-message-user {
     align-self: flex-end;
   }
+
+  
 }
 
 .sidebar-content-section::-webkit-scrollbar {
