@@ -75,6 +75,15 @@ body::-webkit-scrollbar {
   min-height: -webkit-fill-available;
 }
 
+@media (max-width: 1024px) {
+#root {
+  min-height: 0;
+  overflow-y: hidden;
+}
+}
+
+
+
 .app {
   height: 100vh;
   display: flex;

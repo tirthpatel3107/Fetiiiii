@@ -44,7 +44,6 @@
   width: 100%;
   padding: 0 16px 16px;
   position: relative;
-
 }
 
 /* Mobile and Tablet: Remove padding for sidebar-wrapper-inner */
@@ -129,9 +128,6 @@
   flex-direction: column;
   height: 100%;
   font-size: 13px;
-  overflow-y: auto;
-  min-height: 0;
-  flex: 1;
 }
 
 /* Sidebar Content Section */
