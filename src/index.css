@@ -63,11 +63,13 @@ body {
   /* Ensure body fills viewport to prevent white gaps */
   min-height: 100vh;
   min-height: -webkit-fill-available;
+  overflow: hidden;
 }
 
 body::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
 
 #root {
   background-color: #2d3b4e;
