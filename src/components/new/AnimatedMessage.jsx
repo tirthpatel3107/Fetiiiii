@@ -9,6 +9,13 @@ import { scrollToBottom } from "../../utils/domUtils";
 // Track which messages have already been animated (persists across component instances)
 const animatedMessageIds = new Set();
 
+/* Helper function to decode HTML entities */
+const decodeHtmlEntities = (text) => {
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = text;
+  return textarea.value;
+};
+
 /* AnimatedMessage Component - Displays assistant messages with word-by-word typewriter animation */
 const AnimatedMessage = ({
   message = "",
@@ -20,6 +27,11 @@ const AnimatedMessage = ({
   const [shouldAnimate, setShouldAnimate] = useState(false);
   const previousDisplayedTextRef = useRef("");
   const containsHtml = useMemo(() => /<[^>]+>/.test(message), [message]);
+  // Detect HTML entities: named (&amp;), decimal numeric (&#039;), or hex numeric (&#x27;)
+  const containsHtmlEntities = useMemo(
+    () => /&(?:#\d+|#x[\da-fA-F]+|[a-zA-Z]\w*);/.test(message),
+    [message]
+  );
 
   // Determine if we should animate this message
   useEffect(() => {
@@ -63,8 +75,15 @@ const AnimatedMessage = ({
     }
   }, [displayedText, shouldAnimate, scrollContainerRef]);
 
+  // If message contains HTML tags, use dangerouslySetInnerHTML to render properly
   if (containsHtml) {
     return <span dangerouslySetInnerHTML={{ __html: displayedText }} />;
+  }
+
+  // If message contains HTML entities but no HTML tags, decode them for display
+  if (containsHtmlEntities) {
+    const decodedText = decodeHtmlEntities(displayedText);
+    return <>{decodedText}</>;
   }
 
   return <>{displayedText}</>;

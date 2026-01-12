@@ -275,15 +275,16 @@ const Sidebar = ({
                   value={inputValue}
                   onChange={handleInputChange}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      if (isAppleMobile) {
-                        e.preventDefault();
-                        // Blur to dismiss the on-screen keyboard on iOS/iPadOS
-                        textareaRef.current?.blur();
+                    // On desktop: Enter sends message, Shift+Enter adds new line
+                    if (e.key === "Enter") {
+                      if (e.shiftKey) {
+                        // Shift+Enter: allow default behavior (new line)
                         return;
+                      } else if (isDesktop) {
+                        // Enter on desktop: send message
+                        e.preventDefault();
+                        handleSendClick();
                       }
-                      e.preventDefault();
-                      handleSendClick();
                     }
                   }}
                   rows={1}
