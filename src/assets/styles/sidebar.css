@@ -27,8 +27,8 @@
 
 /* Sidebar Main Wrapper */
 .sidebar-wrapper {
-  height: 100%;
-  width: 100vh;
+  height: 100vh;
+  width: 100%;
   position: relative;
   border-radius: 24px;
 
