@@ -27,15 +27,15 @@
 
 /* Sidebar Main Wrapper */
 .sidebar-wrapper {
-  height: 100vh;
+  height: 100%;
   width: 100%;
   position: relative;
   border-radius: 24px;
-
   border: 1px solid rgba(255, 255, 255, 0.05);
   background: rgba(0, 0, 0, 0.15);
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(15px);
+  overflow: hidden;
 }
 
 /* Sidebar Wrapper Inner Container */
