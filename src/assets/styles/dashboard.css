@@ -7,14 +7,6 @@
   -ms-overflow-style: none; /* IE and Edge */
 }
 
-@media (max-width: 1024px) {
-.dashboard-wrapper {
-  min-height: 0;
-  overflow-y: hidden;
-  overflow: hidden;
-}
-}
-
 .dashboard-wrapper::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }

@@ -5,14 +5,6 @@
   position: relative;
 }
 
-@media (max-width: 1024px) {
-.leaflet-map-container {
-  min-height: 0;
-  overflow-y: hidden;
-   overflow: hidden;
-}
-}
-
 /* Custom Marker Styles */
 /* Styles are applied via inline HTML in createCustomIcon function */
 /* This class is used for targeting */

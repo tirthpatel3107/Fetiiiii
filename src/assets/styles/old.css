@@ -50,14 +50,6 @@
   width: 100%;
 }
 
-@media (max-width: 1024px) {
-.leaflet-container {
-  min-height: 0;
-  overflow-y: hidden;
-  overflow: hidden;
-}
-}
-
 .location-popup {
   text-align: center;
 }
